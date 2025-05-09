@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Detalhes do Produto</title>
+  <meta name="viewport" content="width=800, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    body { background: #f8f8f8; font-family: 'Roboto', sans-serif; margin:0; }
+    .detalhe-moldura {
+      width: 800px;
+      background: #fff;
+      margin: 40px auto;
+      border-radius: 24px;
+      box-shadow: 0 8px 32px #0002, 0 1.5px 8px #bbb;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 36px 32px 80px 32px;
+      position: relative;
+      box-sizing: border-box;
+    }
+    .detalhe-img {
+      width: 320px; height: 320px; object-fit: contain; border-radius: 16px; background: #f4f4f4; margin-bottom: 24px; display: block; margin-left:auto; margin-right:auto;
+    }
+    .detalhe-nome { font-size: 2em; font-weight: 700; color: #2b80ff; margin-bottom: 10px; text-align:center; }
+    .detalhe-preco { font-size: 1.5em; color: #222; font-weight: 600; margin-bottom: 10px; text-align:center; }
+    .detalhe-desc { font-size: 1.1em; color: #444; margin-bottom: 18px; text-align:center; }
+    .detalhe-btns { display: flex; gap: 18px; justify-content: center; margin-bottom: 24px; }
+    .btn-detalhe { padding: 12px 28px; border: none; border-radius: 8px; font-size: 1.1em; font-weight: 600; cursor: pointer; transition: background .2s, box-shadow .2s; box-shadow: 0 2px 8px #e0eaff; display: flex; align-items: center; gap: 8px; }
+    .btn-detalhe-carrinho { background: #fff; color: #2b80ff; border: 2px solid #2b80ff; }
+    .btn-detalhe-carrinho:hover { background: #eaf4ff; }
+    .btn-detalhe-compra { background: #25d366; color: #fff; }
+    .btn-detalhe-compra:hover { background: #1db954; }
+    .detalhe-video-wrap {
+      width: 100%;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+    }
+    .detalhe-video-wrap iframe {
+      width: 100%;
+      height: 289px;
+      border-radius: 12px;
+      border: none;
+      background: #000;
+      box-sizing: border-box;
+      display: block;
+    }
+    @media (max-width: 900px) {
+      .detalhe-moldura { width: 98vw; min-height: 600px; padding: 18px 4vw; }
+      .detalhe-video-wrap iframe { height: 220px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="detalhe-moldura" id="detalheMoldura">
+    <!-- Conteúdo via JS -->
+  </div>
+  <script src="produto.js"></script>
+  <script>
+    function getQueryParam(param) {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get(param);
+    }
+    function renderizarDetalhe() {
+      const id = parseInt(getQueryParam('id'));
+      const prod = window.produtos ? window.produtos.find(p => p.id === id) : null;
+      if (!prod) {
+        document.getElementById('detalheMoldura').innerHTML = '<p>Produto não encontrado.</p>';
+        return;
+      }
+      document.getElementById('detalheMoldura').innerHTML = `
+        <img src='${prod.imagem}' alt='${prod.nome}' class='detalhe-img'>
+        <div class='detalhe-nome'>${prod.nome}</div>
+        <div class='detalhe-preco'>R$ ${prod.preco.toFixed(2)}</div>
+        <div class='detalhe-desc'>${prod.detalhes}</div>
+        <div class='detalhe-btns'>
+          <button class='btn-detalhe btn-detalhe-carrinho' onclick='window.opener && window.opener.adicionarCarrinho(${prod.id});window.close();'>
+            <span>🛒</span> Adicionar ao carrinho
+          </button>
+          <button class='btn-detalhe btn-detalhe-compra' onclick='window.opener && window.opener.abrirModalCompra(${prod.id});window.close();'>
+            <span>💬</span> Comprar agora
+          </button>
+        </div>
+        <div class='detalhe-video-wrap'>
+          <iframe src='${prod.video}' allowfullscreen></iframe>
+        </div>
+      `;
+    }
+    window.onload = renderizarDetalhe;
+  </script>
+</body>
+</html> 
