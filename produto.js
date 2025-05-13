@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // Array de ofertas: id do produto e % de desconto
 const ofertas = [
   { id: 4, desconto: 15 }, // Pré-Treino Thunder
